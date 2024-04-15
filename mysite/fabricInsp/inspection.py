@@ -225,7 +225,6 @@ class CnnInspector(Inspector):
     
 
     def inspect(self):
-        # defectCnts = []
         defectTiles = []
 
         tiles, img, clusters = Inspector.inspect(self)
@@ -233,12 +232,10 @@ class CnnInspector(Inspector):
         indices, predictions, probailities = self.infer(tiles)
         p_count = 0
         for i in indices:
-            # defectCnts.append(suspects[i])
             tiles[i].setDefect(probailities[p_count])
             p_count += 1
             defectTiles.append(tiles[i])
                      
-        # return suspects, defectCnts, defectTiles, tiles, predictions, probailities, clusters, img
         return defectTiles, tiles, predictions, probailities, clusters, img
 
 def addContours(img, tiles):
