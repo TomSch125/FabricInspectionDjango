@@ -3,6 +3,12 @@
 import os
 import sys
 
+def is_defect(x): 
+    if x[0]=='d': 
+        return 'defect' 
+    else:  
+        return 'normal'
+
 
 def main():
     """Run administrative tasks."""
