@@ -231,10 +231,11 @@ class CnnInspector(Inspector):
         tiles, img, clusters = Inspector.inspect(self)
                 
         indices, predictions, probailities = self.infer(tiles)
-        
+        p_count = 0
         for i in indices:
             # defectCnts.append(suspects[i])
-            tiles[i].setDefect(probailities[i])
+            tiles[i].setDefect(probailities[p_count])
+            p_count += 1
             defectTiles.append(tiles[i])
                      
         # return suspects, defectCnts, defectTiles, tiles, predictions, probailities, clusters, img

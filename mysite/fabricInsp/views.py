@@ -10,7 +10,7 @@ model = loadModel()
 cnn_isp = CnnInspector(6, 25, model, 5, 5, 15)
 
 def index(request):
-    return render(request, "test.html", {})
+    return render(request, "tester.html", {})
 
 
 def upload_image(request):
