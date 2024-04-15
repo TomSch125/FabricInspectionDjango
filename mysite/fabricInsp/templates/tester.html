@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Upload</title>
+  <title>Fabric Inspector</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -12,10 +12,11 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Upload Image</h5>
+          <h5 class="card-title">Fabric Inspector</h5>
         </div>
         <div class="card-body" >
-          {% if show %}
+          {% if image64 %}
+            <label class="font-weight-bold text-primary">{{lable}}</label>
             <div class="mb-3">
               <img src="data:image/png;base64,{{image64}}" id="tile" alt="tile" style="max-width: 100%">
             </div>

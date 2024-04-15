@@ -19,22 +19,22 @@ def upload_image(request):
         image = request.FILES['image']
         cnn_isp.setImg(image)
         defectTiles, tiles, predictions, probailities, clusters, img = cnn_isp.inspect()
+
+        args = {}
+
         if len(defectTiles) > 0:
             addContours(img, defectTiles)
-
-            # is_success, buffer = cv2.imencode(".png", img)
-            # pngTile = io.BytesIO(buffer)
-            # image64 = image_to_base64(pngTile)
-
             image64 = cv_to_base64(img)
 
-            args = {}
             args['image64'] = image64
-            args['show'] = True
             args['tiles'] = defectTiles
+            args['lable'] = 'Defects Found'
 
-            return render(request, 'test.html', args)
+            return render(request, 'tester.html', args)
         else:
-            return render(request, 'test.html')
+            image64 = cv_to_base64(img)
+            args['image64'] = image64
+            args['lable'] = 'No Defects Found'
+            return render(request, 'tester.html', args)
     else:
-        return render(request, 'test.html')
+        return render(request, 'tester.html')

@@ -16,12 +16,13 @@ def cv_to_base64(image):
     img_str = img_str.decode("utf-8") 
     return img_str
 
+
 class Tile:   
     x = 0
     y = 0
     width = 0
     height = 0
-    suspect = None
+    suspects = None
     roi = None
     prob = None
     defect = False
@@ -32,7 +33,8 @@ class Tile:
         self.y = y
         self.width = width
         self.height = height
-        self.suspect = suspect
+        self.suspects = []
+        self.suspects.append(suspect)
 
     def setDefect(self, prob):
         self.prob = float(prob)
@@ -148,10 +150,12 @@ class Inspector():
         tileHeight = 224
         tiles = []
         
-        print("running tiling "+str(len(suspects)))
+        # print("running tiling "+str(len(suspects)))
+
+        starts = []
 
         for c in suspects:
-            print("cluster started " + str(self.c_size))
+            # print("cluster started " + str(self.c_size))
             x,y,w,h = cv2.boundingRect(c)
 
             xStart = (int(x/tileWidth) * tileWidth)
@@ -171,10 +175,20 @@ class Inspector():
                     if (curY + tileHeight > self.img.shape[0] - 1):
                         curY = self.img.shape[0] - 1 - tileHeight
 
+                    
+                    # tile = Tile(curX, curY, tileWidth, tileHeight, c)
+                    # tile.roi = self.img[curY:curY+tileHeight, curX:curX+tileWidth]
+                    # tiles.append(tile)
 
-                    tile = Tile(curX, curY, tileWidth, tileHeight, c)
-                    tile.roi = self.img[curY:curY+tileHeight, curX:curX+tileWidth]
-                    tiles.append(tile)
+                    if [curX, curY] in starts:
+                        i = starts.index([curX, curY])
+                        tiles[i].suspects.append(c)
+                    else:
+                        #######################################
+                        starts.append([curX, curY])
+                        tile = Tile(curX, curY, tileWidth, tileHeight, c)
+                        tile.roi = self.img[curY:curY+tileHeight, curX:curX+tileWidth]
+                        tiles.append(tile)
 
                     curX = curX + tileWidth
 
@@ -229,7 +243,8 @@ class CnnInspector(Inspector):
 def addContours(img, tiles):
     contours = []
     for t in tiles:
-        contours.append(t.suspect)
+        for c in t.suspects:
+            contours.append(c)
     cv2.drawContours(img, contours, -1, (0,0,255), 3)
 
     
